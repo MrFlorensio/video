@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="color-scheme" content="dark">
+  <title>Lore Intro Relay · Helix / Garry's Mod</title>
+  <style>
+    :root {
+      --bg: #0c0d10;
+      --surface: #14161c;
+      --border: #2a2d36;
+      --text: #e8eaef;
+      --muted: #8b90a0;
+      --accent: #6c9ef8;
+      --accent-dim: #4a6fa8;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* --- Режим плеера (есть ?v=) --- */
+    body.mode-player {
+      overflow: hidden;
+      height: 100%;
+      background: #000;
+    }
+    .stage {
+      display: none;
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    body.mode-player .stage { display: block; }
+    body.mode-player .site { display: none; }
+
+    .frame { position: absolute; inset: 0; overflow: hidden; }
+    .frame--crop #player {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 112vw;
+      height: 128vh;
+      min-width: 112vw;
+      min-height: 128vh;
+      max-width: none;
+      max-height: none;
+      border: 0;
+      transform: translate(-50%, calc(-50% - 6vh));
+    }
+    .frame--full #player {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* --- Лендинг (нет ?v=) --- */
+    .site { max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    .hero {
+      padding: 2rem 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5rem;
+    }
+    .hero p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 40rem; }
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+    }
+    h2 { font-size: 1.05rem; font-weight: 600; margin: 2rem 0 0.75rem; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem;
+      margin: 1rem 0;
+    }
+    table.params { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    table.params th, table.params td {
+      text-align: left;
+      padding: 0.5rem 0.65rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    table.params th { color: var(--muted); font-weight: 500; width: 7rem; }
+    table.params code {
+      font-size: 0.8rem;
+      background: var(--bg);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+    pre.example {
+      margin: 0;
+      padding: 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.78rem;
+      overflow-x: auto;
+      line-height: 1.45;
+    }
+    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <!-- Плеер для игры -->
+  <div class="stage">
+    <div id="frame" class="frame frame--crop">
+      <iframe id="player" title="Video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        referrerpolicy="strict-origin-when-cross-origin"
+        loading="eager"></iframe>
+    </div>
+  </div>
+
+  <!-- Документация для людей -->
+  <div class="site">
+    <div class="hero">
+      <span class="badge">HTTPS relay</span>
+      <h1>Lore Intro Relay</h1>
+      <p>
+        Статическая страница для встраивания YouTube в <strong>Garry's Mod</strong> (Helix, плагин <code>zzz_lore_intro</code>).
+        Игра открывает этот URL с параметрами — без своего <code>asset://</code> меньше Error&nbsp;153.
+      </p>
+    </div>
+
+    <h2>Деплой на GitHub Pages</h2>
+    <div class="card">
+      <ol style="margin:0;padding-left:1.2rem;color:var(--muted);font-size:0.9rem;">
+        <li>Создайте репозиторий и положите в <strong>корень</strong> файлы <code>index.html</code> и <code>.nojekyll</code> из этой папки.</li>
+        <li><strong>Settings → Pages</strong> → Branch <code>main</code>, folder <code>/ (root)</code> (или <code>/docs</code>).</li>
+        <li>Скопируйте выданный URL в конфиг сервера: <code>loreIntroRelayURL</code> — <strong>без</strong> <code>?</code> в конце.</li>
+        <li>ID ролика задаётся в игре: <code>loreIntroVideoID</code>, не на этой странице.</li>
+      </ol>
+    </div>
+
+    <h2>Параметры запроса</h2>
+    <div class="card">
+      <table class="params">
+        <tr><th><code>v</code></th><td>Обязателен для плеера. YouTube video id.</td></tr>
+        <tr><th><code>q</code></th><td>Качество <code>vq</code>: <code>highres</code>, <code>hd2160</code>, … По умолчанию <code>highres</code>.</td></tr>
+        <tr><th><code>m</code></th><td><code>1</code> — домен <code>youtube.com</code>; иначе <code>youtube-nocookie.com</code>.</td></tr>
+        <tr><th><code>muted</code></th><td><code>1</code> — без звука. <code>0</code> или нет — со звуком (если браузер разрешит).</td></tr>
+        <tr><th><code>crop</code></th><td><code>0</code> — без обрезки. Иначе — сдвиг/масштаб iframe, чтобы убрать часть оверлея YouTube.</td></tr>
+      </table>
+    </div>
+
+    <h2>Пример URL</h2>
+    <pre class="example" id="sample"></pre>
+
+    <div class="footer">
+      Откройте эту же страницу с <code>?v=</code> и id ролика — увидите только плеер (режим игры).
+    </div>
+  </div>
+
+  <script>
+(function () {
+  "use strict";
+  var u = new URL(location.href);
+  var v = u.searchParams.get("v");
+  var pathBase = u.pathname.replace(/\/index\.html$/i, "").replace(/\/$/, "") + "/";
+  var sample = u.origin + pathBase + "?v=VIDEO_ID&q=hd2160&muted=0&crop=1";
+  var elSample = document.getElementById("sample");
+  if (elSample) elSample.textContent = sample;
+
+  if (!v || !/^[a-zA-Z0-9_-]{6,32}$/.test(v)) {
+    return;
+  }
+
+  document.body.classList.add("mode-player");
+
+  var q = (u.searchParams.get("q") || "highres").toLowerCase().replace(/[^a-z0-9]/g, "") || "highres";
+  var main = u.searchParams.get("m") === "1";
+  var host = main ? "www.youtube.com" : "www.youtube-nocookie.com";
+  var base = "https://" + host + "/embed/" + encodeURIComponent(v);
+  var ref = location.origin + location.pathname + location.search;
+  var startMuted = u.searchParams.get("muted") === "1";
+  var crop = u.searchParams.get("crop") !== "0";
+
+  var frame = document.getElementById("frame");
+  frame.classList.remove("frame--crop", "frame--full");
+  frame.classList.add(crop ? "frame--crop" : "frame--full");
+
+  var params = new URLSearchParams({
+    autoplay: "1",
+    mute: startMuted ? "1" : "0",
+    playsinline: "1",
+    rel: "0",
+    modestbranding: "1",
+    controls: "0",
+    fs: "0",
+    disablekb: "1",
+    iv_load_policy: "3",
+    origin: location.origin,
+    widget_referrer: ref,
+    vq: q
+  });
+  document.getElementById("player").src = base + "?" + params.toString();
+})();
+  </script>
+</body>
+</html>
